@@ -1,0 +1,472 @@
+<project name="WAB_LTE_TopN_Refactoring" default="local-build">
+	<property environment="env" />
+	<!-- ==================================== Property Define ===========================================-->
+	<property name="buildtools.dir" value="${basedir}/../../../buildtools" />
+	<property name="genexspace.dir" value="${basedir}/../../../" />
+	<property name="src.java.dir" value="${basedir}/src" />
+
+	<property name="ut.java.dir" value="${genexspace.dir}/Test/ut/WorkSet_WebPlugin/WAB_LTE_TopN_Refactoring/ut" />
+	<property name="ut.src.dir" value="${genexspace.dir}/Source_code/WorkSet_WebPlugin/WAB_LTE_TopN_Refactoring" />
+	<property name="webroot.dir" value="${basedir}/WebContent" />
+	<property name="target.dir" value="${basedir}/target" />
+	<property name="classes.dir" value="${target.dir}/classes" />
+	<property name="war.dir" value="${target.dir}/war" />
+	<property name="src.classes.dir" value="${webroot.dir}/WEB-INF/classes" />
+	<property name="ut.classes.dir" value="${classes.dir}/ut" />
+	<property name="report.dir" value="${target.dir}/reports" />
+	<property name="sourcemonitor.report.dir" value="${report.dir}/sourcemonitor" />
+	<property name="checkstyle.report.dir" value="${report.dir}/checkstyle" />
+	<property name="simian.report.dir" value="${report.dir}/simian" />
+	<property name="cct.report.dir" value="${report.dir}/cct" />
+	<property name="findbugs.report.dir" value="${report.dir}/findbugs" />
+	<property name="sharpcounter.report.dir" value="${report.dir}/sharpcounter" />
+	<property name="junit.report.dir" value="${report.dir}/junit" />
+	<property name="coverage.report.dir" value="${report.dir}/coverage" />
+	<property name="JDK_VERSION" value="1.5" />
+	<property name="sourcemonitor.executable" value="${buildtools.dir}/SourceMonitor/SourceMonitor.exe" />
+	<property name="junit.style.dir" value="${buildtools.dir}/junit/xsl" />
+	<property name="cobertura.instrument.class.dir" value="${classes.dir}/instrumented" />
+	<property name="cobertura.executable" value="${buildtools.dir}/cobertura/cobertura-instrument.bat" />
+	<property name="omserviceframe.result.ser.dir" value="${target.dir}/stser" />
+	<property name="server.ser.dir" value="/mnt/omservice/snap/snapwebserver/bin" />
+	<property name="server.war.dir" value="/mnt/omservice/snap/snapwebserver/server/default/deploy" />
+	<property name="st.coverage.report.dir" value="${target.dir}/streport" />
+	<property name="omserviceframe.coverage.report.dir" value="${target.dir}/streport" />
+
+	<property name="ut.project.dir" value="${genexspace.dir}/Test/ut/WorkSet_WebPlugin/WAB_LTE_TopN_Refactoring" />
+
+	<property name="infusion.report.dir" value="${report.dir}/infusion" />
+	<property name="infusionResult" value="${infusion.report.dir}/report.xml" />
+	<property name="infusionThresholdServer" value="\\10.145.110.174\QDIThreshold\QDIThreshold.xml" />
+	<property name="infusionThresholdLocal" value="${buildtools.dir}/inFusion/QDIThreshold/QDIThreshold.xml" />
+	<property name="infusion.threshold" value="140" />
+	<property name="thirdpartlib.dir" value="${genexspace.dir}/Third_party" />
+
+	<!--===================================== Build Files Import =======================================-->
+	<import file="${buildtools.dir}/micro.xml" />
+
+
+	<!-- ==================================== Path Define ==============================================-->
+	<path id="classpath.dev">
+		<fileset dir="${genexspace.dir}/buildtools/devlib">
+			<include name="xerces-2.6.2.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/Third_Party">
+			<include name="ibatis-2.3.4.726.jar" />
+			<include name="mysql-connector-java-5.1.30.jar" />
+			<include name="commons-fileupload-1.3.1.jar" />
+			<include name="commons-io-2.4.jar" />
+			<include name="commons-lang3-3.1.jar" />
+			<include name="commons-net-3.3.jar" />
+			<include name="commons-logging-1.1.3.jar" />
+			<include name="freemarker-2.3.22.jar" />
+			<include name="javassist-3.18.1-GA.jar" />
+			<include name="ognl-3.0.6.jar" />
+			<include name="json-lib-2.4-jdk15.jar" />
+			<include name="log4j-1.2.17.jar" />
+			<include name="dom4j-1.6.1.jar" />
+			<include name="commons-dbcp-1.4.jar" />
+			<include name="commons-pool-1.6.jar" />
+			<include name="xml-apis-2.6.2.jar" />
+			<include name="ezmorph-1.0.6.jar" />
+			<include name="commons-collections-3.2.1.jar" />
+			<include name="commons-lang-2.4.jar" />
+			<include name="commons-beanutils-1.7.0.jar" />
+			<include name="json-lib-2.4-jdk15.jar" />
+			<include name="jackson-annotations-2.2.3.jar" />
+			<include name="jackson-core-2.2.3.jar" />
+			<include name="jackson-databind-2.2.3.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/buildtools/devlib/felix">
+			<include name="pax-web-jsp-1.1.14.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/Third_Party/struts">
+			<include name="struts2-core-2.3.24.1.jar" />
+			<include name="struts2-spring-plugin-2.3.24.1.jar" />
+			<include name="xwork-core-2.3.24.1.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/Third_Party/spring/spring3">
+			<include name="spring-beans-3.2.12.RELEASE.jar" />
+			<include name="spring-context-3.2.12.RELEASE.jar" />
+			<include name="spring-core-3.2.12.RELEASE.jar" />
+			<include name="spring-expression-3.2.12.RELEASE.jar" />
+			<include name="spring-jdbc-3.2.12.RELEASE.jar" />
+			<include name="spring-orm-3.2.12.RELEASE.jar" />
+			<include name="spring-struts-3.2.12.RELEASE.jar" />
+			<include name="spring-tx-3.2.12.RELEASE.jar" />
+			<include name="spring-web-3.2.12.RELEASE.jar" />
+			<include name="spring-webmvc-3.2.12.RELEASE.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/Self_dev/nac">
+			<include name="NAC_PlatForm.jar" />
+			<include name="NAC.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/Self_dev/datamanagement">
+			<include name="genexspace_datamanagement_client.jar" />
+			<include name="genexspace_datamanagement_client_interface.jar" />
+			<include name="genexspace_datamanagement_commonvo.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/Self_dev">
+			<include name="cloudJar.jar" />
+			<include name="gisimport.jar" />
+			<include name="WAB_BundleFrame_new.jar" />
+			<include name="JavaApp_BaseService.jar" />
+			<include name="jppf-server-genexspace-interface.jar" />
+			<include name="CommonBundle.jar" />
+			<include name="JavaApp_BaseService.jar" />
+		</fileset>
+		<fileset dir="${genexspace.dir}/Self_dev/messageframe">
+			<include name="OMStarTaskController.jar" />
+			<include name="SubtaskController.jar" />
+		</fileset>
+		<fileset dir="${buildtools.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${buildtools.dir}/findbugs">
+			<include name="**/*.jar" />
+		</fileset>
+
+		<path location="${src.classes.dir}" />
+		<path location="${ut.classes.dir}" />
+	</path>
+
+	<fileset dir="${src.java.dir}" id="src.fileset.id">
+		<include name="**/*.java" />
+	</fileset>
+
+	<fileset dir="${src.classes.dir}" id="coverage.classes.fileset.id">
+		<include name="**/*.class" />
+	</fileset>
+
+	<fileset dir="${ut.classes.dir}" id="ut.fileset.id">
+		<include name="**/Test*.class" />
+
+		<exclude name="**/TestBaseDao.class" />
+		<!--不执行TestBaseDao.class, modify by wwx224033-->
+	</fileset>
+
+	<path id="ut.classpath.id">
+		<path refid="classpath.dev" />
+		<path location="${src.classes.dir}" />
+		<path location="${ut.classes.dir}" />
+	</path>
+
+	<!--===================================== Third Party Task Import ==================================-->
+	<taskdef resource="ci.properties" classpathref="classpath.dev" />
+	<taskdef resource="my.properties" classpathref="classpath.dev" />
+	<taskdef resource="checkstyletask.properties" classpathref="classpath.dev" />
+	<taskdef resource="tasks.properties" classpathref="classpath.dev" />
+	<taskdef resource="simiantask.properties" classpathref="classpath.dev" />
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="classpath.dev" />
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="classpath.dev" />
+	<typedef name="isgreaterthan" classname="net.sf.antcontrib.logic.condition.IsGreaterThan" classpathref="classpath.dev" />
+	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="classpath.dev" />
+
+	<!--===================================== Target Define ============================================-->
+	<!-- Build Entrance-->
+	<target name="local-build" depends="init,check-checkstyle,compile-src,compile-ut,run-sourcemonitor,check-complexity,check-simian,run-sharpcounter,check-findbugs,infusion,run-ut-coverage,ut-coverage-check,clean-project" />
+	<target name="ci-build" depends="init,check-checkstyle,compile-src,compile-ut,run-sourcemonitor,check-complexity,check-simian,run-sharpcounter,check-findbugs,infusion,run-ut-coverage,build-summary,clean-project" />
+
+	<target name="update-buildtools-dir">
+		<exec dir="${buildtools.dir}" executable="cmd">
+			<arg value="/c" />
+			<arg line="&quot;../buildtools/svn/svn.exe &quot; update &quot;${buildtools.dir}&quot;" />
+		</exec>
+	</target>
+
+	<target name="init">
+		<delete dir="${src.classes.dir}" />
+		<delete dir="${target.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${report.dir}" />
+		<mkdir dir="${war.dir}" />
+		<mkdir dir="${omserviceframe.result.ser.dir}" />
+		<mkdir dir="${omserviceframe.st.coverage.report.dir}" />
+		<antcall target="del-class" />
+		<antcall target="update-buildtools-dir" />
+	</target>
+
+	<target name="del-class">
+		<delete>
+			<fileset dir="${src.java.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="clean-project">
+		<delete dir="${basedir}/mnt" />
+		<delete dir="${basedir}/ps" />
+		<delete dir="${basedir}/test" />
+		<delete>
+			<fileset dir="${src.java.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="compile-src">
+		<delete dir="${src.classes.dir}" />
+		<mkdir dir="${src.classes.dir}" />
+		<javac debug="true" srcdir="${src.java.dir}" source="${JDK_VERSION}" target="${JDK_VERSION}" classpathref="classpath.dev" destdir="${src.classes.dir}" encoding="UTF-8" />
+		<copy toDir="${src.classes.dir}" flatten="false" overwrite="true">
+			<fileset dir="${src.java.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="compile-ut" depends="compile-src">
+		<delete dir="${ut.classes.dir}" />
+		<mkdir dir="${ut.classes.dir}" />
+		<javac debug="true" srcdir="${ut.java.dir}" classpathref="classpath.dev" destdir="${ut.classes.dir}" encoding="UTF-8" />
+		<copy toDir="${ut.classes.dir}" flatten="false" overwrite="true">
+			<fileset dir="${ut.java.dir}">
+				<!--将编译后的文件拷贝到ut目录下, modify by wwx224033-->
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copydir dest="${ut.src.dir}/TestFolder" src="${ut.project.dir}/TestFolder" />
+
+	</target>
+
+
+	<target name="check-checkstyle">
+		<delete dir="${checkstyle.report.dir}" />
+		<mkdir dir="${checkstyle.report.dir}" />
+		<check-checkstyle-micro checkstyle.config.file="${buildtools.dir}/checkstyle/huawei_checkstyle_config.xml" src.fileset.id="src.fileset.id" report.dir="${checkstyle.report.dir}" error.thrdhold="0" warning.thrdhold="0" checkstyle.style.file="${buildtools.dir}/checkstyle/checkstyle-simple.xsl" />
+	</target>
+
+	<target name="run-sourcemonitor">
+		<delete dir="${sourcemonitor.report.dir}" />
+		<mkdir dir="${sourcemonitor.report.dir}" />
+
+		<sm-rpt-macro source.dir="${src.java.dir}" report.dir="${sourcemonitor.report.dir}" xmlreport.file="${sourcemonitor.report.dir}/module.xml" summery.file="${sourcemonitor.report.dir}/summary.xml" executable.file="${sourcemonitor.executable}" tempDetailOutputFile="${sourcemonitor.report.dir}/module.xml" tempdir="${sourcemonitor.report.dir}/sourcemonitor" sourcemonitor.root="${buildtools.dir}/SourceMonitor" jdk.root="${env.JAVA_HOME}" />
+	</target>
+
+	<target name="check-complexity" depends="run-sourcemonitor">
+		<checkmaxcc xmlResultFile="${sourcemonitor.report.dir}/module.xml" threshold="8" haltonfailure="true" logFile="${sourcemonitor.report.dir}/check-complexity.log">
+			<ExcludeFile fileName="com\rulestore\Client.java">
+				<ExcludeMethod methodName="Client.getFileFromServer()" />
+			</ExcludeFile>
+		</checkmaxcc>
+	</target>
+
+	<target name="check-findbugs" depends="compile-src">
+		<delete dir="${findbugs.report.dir}" />
+		<mkdir dir="${findbugs.report.dir}" />
+		<check-findbugs-micro findbug.base="${buildtools.dir}/findbugs" report.dir="${findbugs.report.dir}" aux.classpath="${thirdpartlib.dir}" class.location="${src.classes.dir}" src.location="${src.java.dir}" output.file="findbugs.html" thredhold="0" />
+	</target>
+
+	<target name="run-ut-coverage">
+		<delete dir="${coverage.report.dir}" />
+		<delete dir="${junit.report.dir}" />
+
+		<mkdir dir="${coverage.report.dir}" />
+		<mkdir dir="${junit.report.dir}" />
+		<run-ut-macro junit.report.dir="${junit.report.dir}" junit.style.dir="${junit.style.dir}" coverage.report.dir="${coverage.report.dir}" cobertura.instrument.class.dir="${cobertura.instrument.class.dir}" coverage.classes.fileset.id="coverage.classes.fileset.id" ut.classpath.id="ut.classpath.id" ut.fileset.id="ut.fileset.id" src.java.dir="${src.java.dir}" ut.src.classes.dir="${ut.src.dir}" />
+	</target>
+
+	<target name="ut-coverage-check">
+		<property name="instrument.file.tocheck" value="${basedir}/cobertura.ser" />
+		<property name="coverage.failureporoperty" value="test.result.failed" />
+		<property name="coverage.haltonfailure" value="yes" />
+		<antcall inheritall="true" target="check-coverage" />
+	</target>
+
+
+	<target name="check-coverage">
+		<echo message="instrument.file.tocheck:${instrument.file.tocheck}" />
+		<echo message="coverage.haltonfailure:${coverage.haltonfailure}" />
+		<cobertura-check datafile="${instrument.file.tocheck}" totallinerate="90" totalbranchrate="85" linerate="90" branchrate="90" haltonfailure="${coverage.haltonfailure}" failureproperty="${coverage.failureporoperty}">
+			<regex pattern="com.huawei.rnac.plugin.ltetopn.action.ErrorAction" linerate="77" branchrate="0" />
+			<regex pattern="com.huawei.rnac.plugin.ltetopn.utils.Constants" linerate="0" branchrate="0" />
+			<regex pattern="com.huawei.rnac.plugin.ltetopn.utils.DownloadService" linerate="0" branchrate="0" />
+		</cobertura-check>
+
+	</target>
+
+
+	<target name="check-simian">
+		<delete dir="${simian.report.dir}" />
+		<mkdir dir="${simian.report.dir}" />
+		<check-simian-micro report.dir="${simian.report.dir}" thredhold="1964" src.fileset.id="src.fileset.id" />
+	</target>
+
+	<target name="run-sharpcounter">
+		<delete dir="${sharpcounter.report.dir}" />
+		<mkdir dir="${sharpcounter.report.dir}" />
+		<run-sharpcounter exedir="${buildtools.dir}/sharpcounter/" language="JAVA" currentSourcePath="${src.java.dir}" baselineSourcePath="" fileexts="*.java" reportpath="${sharpcounter.report.dir}/sharpcounter_report_java.xml" excludedPath="" />
+		<run-sharpcounter exedir="${buildtools.dir}/sharpcounter/" language="javascript" currentSourcePath="${webroot.dir}/unet6dplanningapps" baselineSourcePath="" fileexts="*.js" reportpath="${sharpcounter.report.dir}/sharpcounter_report_js.xml" excludedPath="${webroot.dir}/ext-4.1" />
+	</target>
+
+	<target name="infusion">
+		<delete dir="${infusion.report.dir}" />
+		<mkdir dir="${infusion.report.dir}" />
+		<!--
+			<propertycollector propertyname="infusion.threshold" filepath="${infusionThresholdServer}"
+			                       xpathexpression="/Infusion/QDI/OMServiceFrame"/>
+			-->
+		<echo message="QDI threshold is ${infusion.threshold} （From Server 10.145.110.174）" />
+
+		<run-infusion-macro exedir="${buildtools.dir}\inFusion\" language="JAVA" srcpath="${basedir}\src" outputreport="${infusion.report.dir}" outputxml="${infusion.report.dir}" ignorefile="${buildtools.dir}\inFusion\infusionignore.ign" reportpath="${infusionResult}" threshold="${infusion.threshold}" />
+
+		<propertycollector propertyname="CurrentQdi" filepath="${infusionResult}" xpathexpression="/design_flaws/qdi/qdi_normalized" />
+
+		<echo message="Current QDI is ${CurrentQdi}" />
+
+		<xmltask preservetype="true" report="true" source="${infusionThresholdLocal}" dest="${infusionThresholdLocal}">
+			<replace path="/Infusion/QDI/OMServiceFrame/text()" withText="${CurrentQdi}" />
+		</xmltask>
+	</target>
+
+	<target name="CheckSum" description="Acquire MD5 of given file">
+		<delete>
+			<fileset dir="${checkdir}">
+				<include name="*.MD5" />
+				<include name="*.SHA256" />
+			</fileset>
+		</delete>
+		<checksum>
+			<fileset dir="${checkdir}">
+				<include name="**.*" />
+			</fileset>
+		</checksum>
+
+		<checksum algorithm="SHA-256" fileext=".SHA256">
+			<fileset dir="${checkdir}">
+				<exclude name="*.MD5" />
+				<include name="**.*" />
+			</fileset>
+		</checksum>
+
+	</target>
+
+	<target name="ftp-summary">
+		<UploadFTP batfile="${buildtools.dir}/ftp/upload.bat" />
+	</target>
+
+
+	<target name="build-summary">
+		<tstamp>
+			<format property="now" pattern="yyyy-MM-dd-HH-mm" />
+		</tstamp>
+
+		<property name="sharpcounterResult" value="${report.dir}/sharpcounter/sharpcounter_report_java.xml" />
+		<property name="sharpcounterJSResult" value="${report.dir}/sharpcounter/sharpcounter_report_js.xml" />
+		<property name="simianResult" value="${report.dir}/simian/simian.xml" />
+		<property name="findbugsResult" value="${report.dir}/findbugs/findbugs.xml" />
+		<property name="sourcemonitorPathCCProjectReport" value="${report.dir}/sourcemonitor/CCProjectReport.html" />
+		<property name="sourcemonitorPathCCFuncReport" value="${report.dir}/sourcemonitor/CCFuncReport.html" />
+		<property name="utReportPath" value="${report.dir}/junit/overview-summary.html" />
+		<property name="utCoverReportPath" value="${report.dir}/coverage/frame-summary.html" />
+
+		<property name="log.dir" value="${target.dir}/log_OMServiceFrame" />
+
+
+		<!--codeSize-->
+		<propertycollector propertyname="sharpcounterTotal" filepath="${sharpcounterResult}" xpathexpression="/cctresult/Summary/TotalSize" />
+		<propertycollector propertyname="sharpcounterEquivalentsize" filepath="${sharpcounterResult}" xpathexpression="/cctresult/Summary/Language/@EquivalentSize" />
+		<propertycollector propertyname="sharpcounterAdd" filepath="${sharpcounterResult}" xpathexpression="/cctresult/Summary/Language/@AddedSize" />
+		<propertycollector propertyname="sharpcounterDelete" filepath="${sharpcounterResult}" xpathexpression="/cctresult/Summary/Language/@DeletedSize" />
+		<propertycollector propertyname="sharpcounterModify" filepath="${sharpcounterResult}" xpathexpression="/cctresult/Summary/Language/@ModifiedSize" />
+
+
+		<propertycalculater propertyname="cctsize" expression="${sharpcounterTotal}" />
+		<propertycalculater propertyname="cctEquivalentsize" expression="${sharpcounterEquivalentsize}" />
+		<propertycalculater propertyname="cctadd" expression="${sharpcounterAdd}" />
+		<propertycalculater propertyname="cctdelete" expression="${sharpcounterDelete}" />
+		<propertycalculater propertyname="cctmodify" expression="${sharpcounterModify}" />
+
+		<propertycollector propertyname="JSsharpcounterTotal" filepath="${sharpcounterJSResult}" xpathexpression="/cctresult/Summary/TotalSize" />
+		<propertycollector propertyname="JSsharpcounterEquivalentsize" filepath="${sharpcounterJSResult}" xpathexpression="/cctresult/Summary/Language/@EquivalentSize" />
+		<propertycollector propertyname="JSsharpcounterAdd" filepath="${sharpcounterJSResult}" xpathexpression="/cctresult/Summary/Language/@AddedSize" />
+		<propertycollector propertyname="JSsharpcounterDelete" filepath="${sharpcounterJSResult}" xpathexpression="/cctresult/Summary/Language/@DeletedSize" />
+		<propertycollector propertyname="JSsharpcounterModify" filepath="${sharpcounterJSResult}" xpathexpression="/cctresult/Summary/Language/@ModifiedSize" />
+
+		<propertycalculater propertyname="cctsizeJS" expression="${JSsharpcounterTotal}" />
+		<propertycalculater propertyname="cctEquivalentsizeJS" expression="${JSsharpcounterEquivalentsize}" />
+		<propertycalculater propertyname="cctaddJS" expression="${JSsharpcounterAdd}" />
+		<propertycalculater propertyname="cctdeleteJS" expression="${JSsharpcounterDelete}" />
+		<propertycalculater propertyname="cctmodifyJS" expression="${JSsharpcounterModify}" />
+
+		<!--Findbugs-->
+		<propertycollector propertyname="findbugsError" filepath="${findbugsResult}" xpathexpression="/BugCollection/FindBugsSummary/@total_bugs" />
+		<propertycollector propertyname="findbugsWarn" filepath="${findbugsResult}" xpathexpression="/BugCollection/FindBugsSummary/@total_bugs" />
+
+		<propertycalculater propertyname="FindbugsError" expression="${findbugsError}" />
+		<propertycalculater propertyname="FindbugsWarn" expression="${findbugsWarn}" />
+		<propertycalculater propertyname="Findbugs" expression="${FindbugsError}+${FindbugsWarn}" />
+
+		<!--Simian-->
+		<propertycollector propertyname="DuplicateLine" filepath="${simianResult}" xpathexpression="/simian/check/summary/@duplicateLineCount" recordindex="0" />
+		<propertycollector propertyname="TotalSignificantLine" filepath="${simianResult}" xpathexpression="/simian/check/summary/@totalSignificantLineCount" recordindex="0" />
+
+		<propertycalculater propertyname="DuplicateLineCount" expression="${DuplicateLine}" />
+		<propertycalculater propertyname="TotalSignificantLineCount" expression="${TotalSignificantLine}" />
+		<propertycalculater propertyname="SimianLineDuplicate" expression="${DuplicateLineCount}/${TotalSignificantLineCount}*100" />
+
+		<!--UT-->
+		<propertycollector propertyname="UTTestCaseNum" filepath="${utReportPath}" xpathexpression="/html/body/table[2]/tr[2]/td/a" recordindex="0" />
+		<propertycollector propertyname="UTFailureTestNum" filepath="${utReportPath}" xpathexpression="/html/body/table[2]/tr[2]/td/a" recordindex="1" />
+		<propertycollector propertyname="UTErrorTestNum" filepath="${utReportPath}" xpathexpression="/html/body/table[2]/tr[2]/td/a" recordindex="2" />
+
+		<propertycalculater propertyname="TotalUnitTests" expression="${UTTestCaseNum}" />
+		<propertycalculater propertyname="FailureUnitTests" expression="${UTFailureTestNum}" />
+		<propertycalculater propertyname="ErrorUnitTests" expression="${UTErrorTestNum}" />
+
+		<!--UT Coverage-->
+		<propertycollector propertyname="CoverageNum" filepath="${utCoverReportPath}" xpathexpression="/html/body/table/tbody/tr/td[3]/table/tr/td[2]/div/div/span" recordindex="0" defaultvalue="0" />
+		<propertyregex property="CoverageUsed" input="${CoverageNum}" regexp="(.*)/" select="\1" />
+		<propertyregex property="CoverageAll" input="${CoverageNum}" regexp="/(.*)" select="\1" />
+
+		<propertycalculater propertyname="CoverageNumUsed" expression="${CoverageUsed}" />
+		<propertycalculater propertyname="CoverageNumAll" expression="${CoverageAll}" />
+
+		<buildsummary>
+			<rootnode nodeName="project" targetsummaryfile="${log.dir}.xml" projectname="GENEXSpaceV100R001C00">
+				<datacollector nodename="pdu" defaultvalue="OMServiceFrame" />
+				<datacollector nodename="version" defaultvalue="GENEXSpaceV100R001C00" />
+				<datacollector nodename="projectteam" defaultvalue="vCloudTeam" />
+				<datacollector nodename="starttime" defaultvalue="${now}" />
+
+				<datacollector nodename="data">
+					<!--UT-->
+					<datacollector nodename="UTTestCaseNum" defaultvalue="${TotalUnitTests}" />
+					<datacollector nodename="UTFailureTestNum" defaultvalue="${FailureUnitTests}" />
+					<datacollector nodename="UTErrorTestNum" defaultvalue="${ErrorUnitTests}" />
+
+					<!--UT Coverage-->
+					<datacollector nodename="UtLinesTotal" defaultvalue="${CoverageNumAll}" />
+					<datacollector nodename="UtLinesUsed" defaultvalue="${CoverageNumUsed}" />
+
+					<!--Findbugs-->
+					<datacollector nodename="findbugs" defaultvalue="${Findbugs}" />
+
+					<!--CodeSize-->
+					<datacollector nodename="cctsize" defaultvalue="${cctsize}" />
+					<datacollector nodename="cctEquivalentsize" defaultvalue="${cctEquivalentsize}" />
+					<datacollector nodename="cctadd" defaultvalue="${cctadd}" />
+					<datacollector nodename="cctdelete" defaultvalue="${cctdelete}" />
+					<datacollector nodename="cctmodify" defaultvalue="${cctmodify}" />
+					<!--JS CodeSize-->
+					<datacollector nodename="cctsizeJS" defaultvalue="${cctsizeJS}" />
+					<datacollector nodename="cctEquivalentsizeJS" defaultvalue="${cctEquivalentsizeJS}" />
+					<datacollector nodename="cctaddJS" defaultvalue="${cctaddJS}" />
+					<datacollector nodename="cctdeleteJS" defaultvalue="${cctdeleteJS}" />
+					<datacollector nodename="cctmodifyJS" defaultvalue="${cctmodifyJS}" />
+
+					<!--Simian-->
+					<datacollector nodename="DuplicateLineCount" defaultvalue="${DuplicateLineCount}" />
+					<datacollector nodename="TotalSignificantLineCount" defaultvalue="${TotalSignificantLineCount}" />
+
+					<!--Sourcemonitor-->
+					<sourcemonitorcollector nodename="maxCC" filepath="${sourcemonitorPathCCProjectReport}" linelocation="49" defaultvalue="7" />
+					<sourcemonitorcollector nodename="maxDepths" filepath="${sourcemonitorPathCCProjectReport}" linelocation="51" defaultvalue="4" />
+
+					<datacollector nodename="build" filepath="" defaultvalue="true" />
+				</datacollector>
+			</rootnode>
+		</buildsummary>
+	</target>
+</project>
